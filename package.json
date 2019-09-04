@@ -7,11 +7,19 @@
     "react-dom": "^16.9.0",
     "react-scripts": "3.1.1"
   },
+  "devDependencies": {
+    "standard": "^14.1.0"
+  },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
+    "clean": "rm -f ./yarn.lock && rm -f ./yarn-*.log && yarn cache clean",
+    "eject": "react-scripts eject",
+    "init": "rm -rf ./node_modules && yarn",
+    "lint": "standard --fix",
+    "nuke": "yarn run clean && yarn run init",
+    "start": "react-scripts start",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "upgrade": "npx upgradeps"
   },
   "eslintConfig": {
     "extends": "react-app"
