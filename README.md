@@ -17,4 +17,4 @@ $ yarn run start
 
 ### Versions
 - 0.0.1
-[[https://github.com/lropero/chessy/blob/master/thumbnails/chessy-0.0.1.gif]]
+![Version 0.0.1](https://github.com/lropero/chessy/blob/master/thumbnails/chessy-0.0.1.gif)
