@@ -9,7 +9,7 @@ const linesToSvg = (lines, width) => {
           key={index}
           points={`${line.x1},${line.y1} ${line.x2},${line.y2}`}
           stroke={line.color}
-          strokeWidth='10'
+          strokeWidth='8'
         />
       ))}
     </svg>
