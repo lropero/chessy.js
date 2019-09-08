@@ -72,7 +72,7 @@ const App = () => {
               }
               break
             }
-            if (piece.type === 'n' || piece.type === 'k') break
+            if (piece.type === 'k' || piece.type === 'n') break
           }
         }
       }
