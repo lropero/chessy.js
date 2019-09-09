@@ -28,4 +28,4 @@ console.log(attacks)
 //   white: [['c4', 'a6'], ['c4', 'f7']]
 // }
 ```
-<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacks-white.png" width="300"><img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacks-black.png" width="300">
+<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacks-white.png" width="300">&nbsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacks-black.png" width="300">
