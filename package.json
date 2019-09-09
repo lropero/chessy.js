@@ -1,44 +1,19 @@
 {
   "name": "chessy",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Chess tools for the brain.",
-  "private": true,
-  "dependencies": {
-    "chess.js": "^0.10.2",
-    "chessboardjsx": "^2.4.2",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
-    "react-scripts": "3.1.1",
-    "rxjs": "^6.5.3",
-    "styled-components": "^4.3.2"
+  "main": "chessy.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lropero/chessy.git"
   },
-  "devDependencies": {
-    "standard": "^14.1.0"
+  "keywords": [
+    "chess"
+  ],
+  "author": "Luciano Ropero <lropero@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lropero/chessy/issues"
   },
-  "scripts": {
-    "build": "react-scripts build",
-    "clean": "rm -f ./yarn.lock && rm -f ./yarn-*.log && yarn cache clean",
-    "eject": "react-scripts eject",
-    "init": "rm -rf ./node_modules && yarn",
-    "lint": "standard --fix",
-    "nuke": "yarn run clean && yarn run init",
-    "start": "react-scripts start",
-    "test": "react-scripts test",
-    "upgrade": "npx upgradeps"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+  "homepage": "https://github.com/lropero/chessy#readme"
 }
