@@ -29,5 +29,4 @@ console.log(attacks)
 // }
 ```
 <img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacks-white.png" width="300">
-![chessy-attacks-white](https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacks-white.png | width=300)
-![chessy-attacks-black](https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacks-black.png | width=300)
+<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacks-black.png" width="300">
