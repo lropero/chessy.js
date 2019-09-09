@@ -28,5 +28,5 @@ console.log(attacks)
 //   white: [['c4', 'a6'], ['c4', 'f7']]
 // }
 ```
-![chessy-attacks-white](https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacks-white.png)
-![chessy-attacks-black](https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacks-black.png)
+![chessy-attacks-white](https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacks-white.png =300x300)
+![chessy-attacks-black](https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacks-black.png =300x300)
