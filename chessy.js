@@ -56,56 +56,63 @@ const fenToBoard = (fen) => {
   return board
 }
 
-const getAttacks = (fen, swap = false) => {
-  const attacks = { black: [], white: [] }
+const getAttacks = (fen, swap) => {
+  const attacks = { black: {}, white: {} }
   const board = fenToBoard(fen)
-  const sights = getSights(fen)
+  const sights = getSights(fen, board)
   for (const color of ['black', 'white']) {
     const color2 = (swap && (color === 'black' ? 'white' : 'black')) || color
-    attacks[color] = Object.keys(sights[color2]).reduce((attacks, fromAlgebraic) => {
+    attacks[color] = Object.keys(sights[color2]).reduce((attacksColor, fromAlgebraic) => {
       for (const toAlgebraic of sights[color2][fromAlgebraic]) {
         if (board[SQUARES[toAlgebraic]] && board[SQUARES[toAlgebraic]].color !== (color2).charAt(0)) {
-          attacks.push([fromAlgebraic, toAlgebraic])
+          if (!attacksColor[fromAlgebraic]) {
+            attacksColor[fromAlgebraic] = []
+          }
+          attacksColor[fromAlgebraic].push(toAlgebraic)
         }
       }
-      return attacks
-    }, [])
+      return attacksColor
+    }, {})
   }
   return attacks
 }
 
 const getDefenses = (fen) => {
-  const defenses = { black: [], white: [] }
+  const defenses = { black: {}, white: {} }
   const board = fenToBoard(fen)
-  const sights = getSights(fen)
+  const sights = getSights(fen, board)
   for (const color of ['black', 'white']) {
-    defenses[color] = Object.keys(sights[color]).reduce((defenses, fromAlgebraic) => {
+    defenses[color] = Object.keys(sights[color]).reduce((defensesColor, fromAlgebraic) => {
       for (const toAlgebraic of sights[color][fromAlgebraic]) {
         if (board[SQUARES[toAlgebraic]] && board[SQUARES[toAlgebraic]].color === color.charAt(0)) {
-          defenses.push([fromAlgebraic, toAlgebraic])
+          if (!defensesColor[fromAlgebraic]) {
+            defensesColor[fromAlgebraic] = []
+          }
+          defensesColor[fromAlgebraic].push(toAlgebraic)
         }
       }
-      return defenses
-    }, [])
+      return defensesColor
+    }, {})
   }
   return defenses
 }
 
-const getSights = (fen) => {
-  const sights = { black: {}, white: {} }
-  const board = fenToBoard(fen)
+const getSights = (fen, board) => {
+  const temp = { black: {}, white: {} }
+  board = board || fenToBoard(fen)
   for (const [from, piece] of board.entries()) {
     if (piece) {
       const color = piece.color === 'b' ? 'black' : 'white'
+      const fromAlgebraic = squareToAlgebraic(from)
       if (piece.type === 'p') {
         for (let i = 2; i < 4; i++) {
           const to = from + OFFSETS.p[piece.color][i]
           if (to & 0x88) continue
-          const fromAlgebraic = squareToAlgebraic(from)
-          if (!sights[color][fromAlgebraic]) {
-            sights[color][fromAlgebraic] = []
+          if (!temp[color][fromAlgebraic]) {
+            temp[color][fromAlgebraic] = []
           }
-          sights[color][fromAlgebraic].push(squareToAlgebraic(to))
+          temp[color][fromAlgebraic].push(squareToAlgebraic(to))
+          temp[color][fromAlgebraic].sort()
         }
       } else {
         for (let i = 0; i < OFFSETS[piece.type].length; i++) {
@@ -113,15 +120,21 @@ const getSights = (fen) => {
           while (true) {
             to += OFFSETS[piece.type][i]
             if (to & 0x88) break
-            const fromAlgebraic = squareToAlgebraic(from)
-            if (!sights[color][fromAlgebraic]) {
-              sights[color][fromAlgebraic] = []
+            if (!temp[color][fromAlgebraic]) {
+              temp[color][fromAlgebraic] = []
             }
-            sights[color][fromAlgebraic].push(squareToAlgebraic(to))
+            temp[color][fromAlgebraic].push(squareToAlgebraic(to))
+            temp[color][fromAlgebraic].sort()
             if (board[to] || piece.type === 'k' || piece.type === 'n') break
           }
         }
       }
+    }
+  }
+  const sights = { black: {}, white: {} }
+  for (const color of ['black', 'white']) {
+    for (const fromAlgebraic of Object.keys(temp[color]).sort()) {
+      sights[color][fromAlgebraic] = temp[color][fromAlgebraic]
     }
   }
   return sights
