@@ -1,11 +1,11 @@
 # chessy.js &middot; [![npm version](https://badge.fury.io/js/chessy.svg)](https://www.npmjs.com/package/chessy)&nbsp;[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 *Chess tools for the brain.*
 
-<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy.gif" width="400">
+<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy.gif?raw=true" width="400">
 
 ### Installation
 ```sh
-$ npm install chessy --save
+$ yarn add chessy
 ```
 
 ### Usage
@@ -21,7 +21,7 @@ const { getAttacks, getDefenses, getSights, getThreats } = require('chessy')
 
 ### API
 ##### getAttacks(fen: String)
-<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacks-white.png" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacks-black.png" width="300">
+<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacks-white.png?raw=true" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacks-black.png?raw=true" width="300">
 ```js
 const fen = 'rnbqkb1r/1p2pppp/p2p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 0 1'
 const attacks = getAttacks(fen)
@@ -39,7 +39,7 @@ console.log(attacks)
 ```
 
 ##### getDefenses(fen: String)
-<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-defenses-white.png" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-defenses-black.png" width="300">
+<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-defenses-white.png?raw=true" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-defenses-black.png?raw=true" width="300">
 ```js
 const fen = 'rnbqkb1r/1p2pppp/p2p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 0 1'
 const defenses = getDefenses(fen)
@@ -75,7 +75,7 @@ console.log(defenses)
 ```
 
 ##### getSights(fen: String)
-<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-sights-white.png" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-sights-black.png" width="300">
+<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-sights-white.png?raw=true" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-sights-black.png?raw=true" width="300">
 ```js
 const fen = 'rnbqkb1r/1p2pppp/p2p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 0 1'
 const sights = getSights(fen)
@@ -121,7 +121,7 @@ console.log(sights)
 ```
 
 ##### getThreats(fen: String)
-<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-threats-white.png" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-threats-black.png" width="300">
+<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-threats-white.png?raw=true" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-threats-black.png?raw=true" width="300">
 ```js
 const fen = 'rnbqkb1r/1p2pppp/p2p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 0 1'
 const threats = getThreats(fen)
