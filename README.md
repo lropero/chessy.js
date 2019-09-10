@@ -21,6 +21,7 @@ const { getAttacks, getDefenses, getSights, getThreats } = require('chessy')
 
 ### API
 ##### getAttacks(fen: String)
+<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacks-white.png" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacks-black.png" width="300">
 ```js
 const fen = 'rnbqkb1r/1p2pppp/p2p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 0 1'
 const attacks = getAttacks(fen)
@@ -36,9 +37,9 @@ console.log(attacks)
 }
 */
 ```
-<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacks-white.png" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacks-black.png" width="300">
 
 ##### getDefenses(fen: String)
+<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-defenses-white.png" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-defenses-black.png" width="300">
 ```js
 const fen = 'rnbqkb1r/1p2pppp/p2p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 0 1'
 const defenses = getDefenses(fen)
@@ -72,9 +73,9 @@ console.log(defenses)
 }
 */
 ```
-<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-defenses-white.png" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-defenses-black.png" width="300">
 
 ##### getSights(fen: String)
+<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-sights-white.png" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-sights-black.png" width="300">
 ```js
 const fen = 'rnbqkb1r/1p2pppp/p2p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 0 1'
 const sights = getSights(fen)
@@ -118,9 +119,9 @@ console.log(sights)
 }
 */
 ```
-<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-sights-white.png" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-sights-black.png" width="300">
 
 ##### getThreats(fen: String)
+<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-threats-white.png" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-threats-black.png" width="300">
 ```js
 const fen = 'rnbqkb1r/1p2pppp/p2p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 0 1'
 const threats = getThreats(fen)
@@ -136,4 +137,3 @@ console.log(threats)
 }
 */
 ```
-<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-threats-white.png" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-threats-black.png" width="300">
