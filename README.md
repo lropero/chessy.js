@@ -1,5 +1,5 @@
-# chessy.js &middot; [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-*Chess tools for the brain.*
+# chessy.js &middot; [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)&emsp;[![npm version](https://badge.fury.io/js/upgradeps.svg)](https://www.npmjs.com/package/upgradeps)
+*A pawn and a king*
 
 <img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy.gif" width="400">
 
