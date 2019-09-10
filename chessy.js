@@ -41,7 +41,10 @@ const SQUARES = {
 
 const fenToBoard = (fen) => {
   const board = new Array(128)
-  const position = fen.split(/\s+/)[0]
+  const split = fen.split(/\s+/)
+  const ep = split[3] !== '-' && SQUARES[split[3]]
+  const position = split[0]
+  const turn = split[1]
   let square = 0
   for (const char of position.split('')) {
     if (char === '/') {
@@ -53,18 +56,20 @@ const fenToBoard = (fen) => {
       square++
     }
   }
-  return board
+  return [board, { ep, turn }]
 }
 
 const getAttacks = (fen, swap) => {
   const attacks = { black: {}, white: {} }
-  const board = fenToBoard(fen)
+  const [board, { ep, turn }] = fenToBoard(fen)
   const sights = getSights(fen, board)
   for (const color of ['black', 'white']) {
     const color2 = (swap && (color === 'black' ? 'white' : 'black')) || color
     attacks[color] = Object.keys(sights[color2]).reduce((attacksColor, fromAlgebraic) => {
       for (const toAlgebraic of sights[color2][fromAlgebraic]) {
-        if (board[SQUARES[toAlgebraic]] && board[SQUARES[toAlgebraic]].color !== (color2).charAt(0)) {
+        const enPassant = board[SQUARES[fromAlgebraic]].color === turn && board[SQUARES[fromAlgebraic]].type === 'p' && SQUARES[toAlgebraic] === ep
+        const piece = board[SQUARES[toAlgebraic]] && board[SQUARES[toAlgebraic]].color !== (color2).charAt(0)
+        if ((enPassant) || (piece)) {
           if (!attacksColor[fromAlgebraic]) {
             attacksColor[fromAlgebraic] = []
           }
@@ -79,7 +84,7 @@ const getAttacks = (fen, swap) => {
 
 const getDefenses = (fen) => {
   const defenses = { black: {}, white: {} }
-  const board = fenToBoard(fen)
+  const board = fenToBoard(fen)[0]
   const sights = getSights(fen, board)
   for (const color of ['black', 'white']) {
     defenses[color] = Object.keys(sights[color]).reduce((defensesColor, fromAlgebraic) => {
@@ -99,7 +104,7 @@ const getDefenses = (fen) => {
 
 const getSights = (fen, board) => {
   const temp = { black: {}, white: {} }
-  board = board || fenToBoard(fen)
+  board = board || fenToBoard(fen)[0]
   for (const [from, piece] of board.entries()) {
     if (piece) {
       const color = piece.color === 'b' ? 'black' : 'white'
@@ -154,4 +159,5 @@ exports.getAttacks = getAttacks
 exports.getDefenses = getDefenses
 exports.getSights = getSights
 exports.getThreats = getThreats
+
 module.exports = { getAttacks, getDefenses, getSights, getThreats }
