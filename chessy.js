@@ -14,21 +14,18 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-const COLORS = {
-  b: 'black',
-  w: 'white'
-}
+const COLORS = ['black', 'white']
 
 const OFFSETS = {
-  b: [-17, -15, 17, 15],
-  k: [-17, -16, -15, 1, 17, 16, 15, -1],
-  n: [-18, -33, -31, -14, 18, 33, 31, 14],
-  p: {
-    b: [16, 32, 17, 15],
-    w: [-16, -32, -17, -15]
+  bishop: [-17, -15, 17, 15],
+  king: [-17, -16, -15, 1, 17, 16, 15, -1],
+  knight: [-18, -33, -31, -14, 18, 33, 31, 14],
+  pawn: {
+    black: [16, 32, 17, 15],
+    white: [-16, -32, -17, -15]
   },
-  q: [-17, -16, -15, 1, 17, 16, 15, -1],
-  r: [-16, 1, 16, -1]
+  queen: [-17, -16, -15, 1, 17, 16, 15, -1],
+  rook: [-16, 1, 16, -1]
 }
 
 /* eslint-disable */
@@ -46,8 +43,18 @@ const SQUARES = {
 
 const fenToBoard = (fen) => {
   if (typeof fen === 'string' && /^[1-8BKNQRbknqr]+\/([1-8BKNPQRbknpqr]+\/){6}[1-8BKNQRbknqr]+(\s[bw]\s(-|K?Q?k?q?)\s(-|[a-h][36])\s\d+\s\d+)?$/.test(fen)) {
-    const board = new Array(128)
     const [position, turn = null,, ep = null] = fen.split(' ')
+    const board = new Array(128)
+    const charToType = (char) => {
+      switch (char) {
+        case 'b': return 'bishop'
+        case 'k': return 'king'
+        case 'n': return 'knight'
+        case 'p': return 'pawn'
+        case 'q': return 'queen'
+        case 'r': return 'rook'
+      }
+    }
     let square = 0
     for (const char of position.split('')) {
       if (char === '/') {
@@ -55,89 +62,133 @@ const fenToBoard = (fen) => {
       } else if ('0123456789'.indexOf(char) !== -1) {
         square += parseInt(char, 10)
       } else {
-        board[square++] = { color: char >= 'a' ? 'b' : 'w', type: char.toLowerCase() }
+        board[square++] = { color: char >= 'a' ? 'black' : 'white', type: charToType(char.toLowerCase()) }
       }
     }
-    return [board, { ep: ep && ep !== '-' && SQUARES[ep], turn }]
+    return { board, ep: ep && ep !== '-' && SQUARES[ep], turn }
   }
-  return [[], { ep: null, turn: null }]
+  return { board: [], ep: null, turn: null }
 }
 
-const getAttacks = (fen, swap) => {
-  const colors = Object.values(COLORS)
-  const attacks = colors.reduce((attacks, color) => {
-    attacks[color] = {}
-    return attacks
+const getAttacking = (fen, extra = {}) => {
+  const attacking = COLORS.reduce((attacking, color) => {
+    attacking[color] = {}
+    return attacking
   }, {})
-  const [board, { ep, turn }] = fenToBoard(fen)
+  const { board, ep, turn } = (Object.keys(extra).length === 3 && extra) || fenToBoard(fen)
   if (board.length) {
-    const sights = getSights(fen, board)
-    for (const [index, color] of colors.entries()) {
-      const color2 = (swap && colors[1 - index]) || color
-      attacks[color] = Object.keys(sights[color2]).reduce((attacksColor, fromAlgebraic) => {
-        for (const toAlgebraic of sights[color2][fromAlgebraic]) {
-          const enPassant = ep && board[SQUARES[fromAlgebraic]].color === turn && board[SQUARES[fromAlgebraic]].type === 'p' && SQUARES[toAlgebraic] === ep
-          const piece = board[SQUARES[toAlgebraic]] && board[SQUARES[toAlgebraic]].color !== (color2).charAt(0)
-          const illegalKingMove = piece && board[SQUARES[fromAlgebraic]].type === 'k' && Object.values(sights[COLORS[board[SQUARES[toAlgebraic]].color]]).reduce((defended, defenses) => [...defended, ...defenses], []).includes(toAlgebraic)
-          if ((enPassant || piece) && !illegalKingMove) {
-            if (!attacksColor[fromAlgebraic]) {
-              attacksColor[fromAlgebraic] = []
-            }
-            attacksColor[fromAlgebraic].push(toAlgebraic)
-          }
-        }
-        return attacksColor
-      }, {})
-    }
-  }
-  return attacks
-}
-
-const getDefenses = (fen) => {
-  const colors = Object.values(COLORS)
-  const defenses = colors.reduce((defenses, color) => {
-    defenses[color] = {}
-    return defenses
-  }, {})
-  const board = fenToBoard(fen)[0]
-  if (board.length) {
-    const sights = getSights(fen, board)
-    for (const color of colors) {
-      defenses[color] = Object.keys(sights[color]).reduce((defensesColor, fromAlgebraic) => {
+    const sights = getSights(fen, { board })
+    for (const [index, color] of COLORS.entries()) {
+      attacking[(extra.threats && COLORS[1 - index]) || color] = Object.keys(sights[color]).reduce((attackingColor, fromAlgebraic) => {
         for (const toAlgebraic of sights[color][fromAlgebraic]) {
-          if (board[SQUARES[toAlgebraic]] && board[SQUARES[toAlgebraic]].color === color.charAt(0)) {
-            if (!defensesColor[fromAlgebraic]) {
-              defensesColor[fromAlgebraic] = []
+          const enPassant = ep === SQUARES[toAlgebraic] && turn === board[SQUARES[fromAlgebraic]].color.charAt(0) && board[SQUARES[fromAlgebraic]].type === 'pawn'
+          const piece = board[SQUARES[toAlgebraic]] && board[SQUARES[toAlgebraic]].color !== color
+          const illegalKingMove = piece && board[SQUARES[fromAlgebraic]].type === 'king' && Object.values(sights[board[SQUARES[toAlgebraic]].color]).reduce((defended, defenses) => [...defended, ...defenses], []).includes(toAlgebraic)
+          if ((enPassant || piece) && !illegalKingMove) {
+            if (!attackingColor[extra.threats ? toAlgebraic : fromAlgebraic]) {
+              attackingColor[extra.threats ? toAlgebraic : fromAlgebraic] = []
             }
-            defensesColor[fromAlgebraic].push(toAlgebraic)
+            attackingColor[extra.threats ? toAlgebraic : fromAlgebraic].push(extra.threats ? fromAlgebraic : toAlgebraic)
           }
         }
-        return defensesColor
+        return attackingColor
       }, {})
     }
   }
-  return defenses
+  return attacking
 }
 
-const getSights = (fen, board) => {
-  const colors = Object.values(COLORS)
-  const temp = colors.reduce((temp, color) => {
+const getDefending = (fen, extra = {}) => {
+  const defending = COLORS.reduce((defending, color) => {
+    defending[color] = {}
+    return defending
+  }, {})
+  const { board } = (Object.keys(extra).includes('board') && extra) || fenToBoard(fen)
+  if (board.length) {
+    const sights = getSights(fen, { board })
+    for (const color of COLORS) {
+      defending[color] = Object.keys(sights[color]).reduce((defendingColor, fromAlgebraic) => {
+        for (const toAlgebraic of sights[color][fromAlgebraic]) {
+          if (board[SQUARES[toAlgebraic]] && board[SQUARES[toAlgebraic]].color === color) {
+            if (!defendingColor[extra.swap ? toAlgebraic : fromAlgebraic]) {
+              defendingColor[extra.swap ? toAlgebraic : fromAlgebraic] = []
+            }
+            defendingColor[extra.swap ? toAlgebraic : fromAlgebraic].push(extra.swap ? fromAlgebraic : toAlgebraic)
+          }
+        }
+        return defendingColor
+      }, {})
+    }
+  }
+  return defending
+}
+
+const getDefenses = (fen, extra = {}) => {
+  return getDefending(fen, Object.assign({}, extra, { swap: true }))
+}
+
+const getInfo = (fen, algebraics) => {
+  if (Array.isArray(algebraics)) {
+    const { board, ep, turn } = fenToBoard(fen)
+    if (board.length) {
+      const attacking = getAttacking(fen, { board, ep, turn })
+      const defending = getDefending(fen, { board, ep, turn })
+      const defenses = getDefenses(fen, { board, ep, turn })
+      const sights = getSights(fen, { board, ep, turn })
+      const threats = getThreats(fen, { board, ep, turn })
+      return algebraics.sort().reduce((info, algebraic) => {
+        const piece = board[SQUARES[algebraic]]
+        if (piece) {
+          info[algebraic] = {
+            attacking: Object.assign({}, ...Object.values(attacking))[algebraic] || null,
+            defending: Object.assign({}, ...Object.values(defending))[algebraic] || null,
+            defenses: Object.assign({}, ...Object.values(defenses))[algebraic] || null,
+            piece,
+            sights: Object.assign({}, ...Object.values(sights))[algebraic] || null,
+            threats: Object.assign({}, ...Object.values(threats))[algebraic] || null
+          }
+        }
+        return info
+      }, {})
+    }
+  }
+  return {}
+}
+
+const getObscured = (fen) => {
+  const obscured = COLORS.reduce((obscured, color) => {
+    obscured[color] = []
+    return obscured
+  }, {})
+  const { board } = fenToBoard(fen)
+  if (board.length) {
+    const sights = getSights(fen)
+    const squares = Object.keys(SQUARES).sort()
+    for (const color of COLORS) {
+      obscured[color] = squares.filter((algebraic) => ![].concat(...Object.keys(sights[color])).concat(...Object.values(sights[color])).includes(algebraic))
+    }
+  }
+  return obscured
+}
+
+const getSights = (fen, extra = {}) => {
+  const temp = COLORS.reduce((temp, color) => {
     temp[color] = {}
     return temp
   }, {})
-  board = board || fenToBoard(fen)[0]
+  const { board } = (Object.keys(extra).includes('board') && extra) || fenToBoard(fen)
   if (board.length) {
     for (const [from, piece] of board.entries()) {
       if (piece) {
         const fromAlgebraic = squareToAlgebraic(from)
-        if (piece.type === 'p') {
+        if (piece.type === 'pawn') {
           for (let i = 2; i < 4; i++) {
-            const to = from + OFFSETS.p[piece.color][i]
+            const to = from + OFFSETS.pawn[piece.color][i]
             if (to & 0x88) continue
-            if (!temp[COLORS[piece.color]][fromAlgebraic]) {
-              temp[COLORS[piece.color]][fromAlgebraic] = []
+            if (!temp[piece.color][fromAlgebraic]) {
+              temp[piece.color][fromAlgebraic] = []
             }
-            temp[COLORS[piece.color]][fromAlgebraic].push(squareToAlgebraic(to))
+            temp[piece.color][fromAlgebraic].push(squareToAlgebraic(to))
           }
         } else {
           for (let i = 0; i < OFFSETS[piece.type].length; i++) {
@@ -145,22 +196,22 @@ const getSights = (fen, board) => {
             while (true) {
               to += OFFSETS[piece.type][i]
               if (to & 0x88) break
-              if (!temp[COLORS[piece.color]][fromAlgebraic]) {
-                temp[COLORS[piece.color]][fromAlgebraic] = []
+              if (!temp[piece.color][fromAlgebraic]) {
+                temp[piece.color][fromAlgebraic] = []
               }
-              temp[COLORS[piece.color]][fromAlgebraic].push(squareToAlgebraic(to))
-              if (board[to] || piece.type === 'k' || piece.type === 'n') break
+              temp[piece.color][fromAlgebraic].push(squareToAlgebraic(to))
+              if (board[to] || piece.type === 'king' || piece.type === 'knight') break
             }
           }
         }
       }
     }
   }
-  const sights = colors.reduce((sights, color) => {
+  const sights = COLORS.reduce((sights, color) => {
     sights[color] = {}
     return sights
   }, {})
-  for (const color of colors) {
+  for (const color of COLORS) {
     for (const fromAlgebraic of Object.keys(temp[color]).sort()) {
       sights[color][fromAlgebraic] = temp[color][fromAlgebraic].sort()
     }
@@ -168,8 +219,8 @@ const getSights = (fen, board) => {
   return sights
 }
 
-const getThreats = (fen) => {
-  return getAttacks(fen, true)
+const getThreats = (fen, extra = {}) => {
+  return getAttacking(fen, Object.assign({}, extra, { threats: true }))
 }
 
 const squareToAlgebraic = (square) => {
@@ -178,9 +229,12 @@ const squareToAlgebraic = (square) => {
   return 'abcdefgh'.substring(file, file + 1) + '87654321'.substring(rank, rank + 1)
 }
 
-exports.getAttacks = getAttacks
+exports.getAttacking = getAttacking
+exports.getDefending = getDefending
 exports.getDefenses = getDefenses
+exports.getInfo = getInfo
+exports.getObscured = getObscured
 exports.getSights = getSights
 exports.getThreats = getThreats
 
-module.exports = { getAttacks, getDefenses, getSights, getThreats }
+module.exports = { getAttacking, getDefending, getDefenses, getInfo, getObscured, getSights, getThreats }
