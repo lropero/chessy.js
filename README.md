@@ -1,5 +1,5 @@
 # chessy.js &middot; [![npm version](https://badge.fury.io/js/chessy.svg)](https://www.npmjs.com/package/chessy)&nbsp;[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-*A pawn and a king.*
+*Chess tools for the brain.*
 
 <img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy.gif?raw=true" width="400">
 
