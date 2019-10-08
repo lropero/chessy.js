@@ -1,6 +1,6 @@
 {
   "name": "chessy",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Chess tools for the brain.",
   "main": "chessy.js",
   "repository": {

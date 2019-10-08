@@ -110,21 +110,31 @@ const getDefending = (fen, extra = {}) => {
       defending[color] = Object.keys(sights[color]).reduce((defendingColor, fromAlgebraic) => {
         for (const toAlgebraic of sights[color][fromAlgebraic]) {
           if (board[SQUARES[toAlgebraic]] && board[SQUARES[toAlgebraic]].color === color) {
-            if (!defendingColor[extra.swap ? toAlgebraic : fromAlgebraic]) {
-              defendingColor[extra.swap ? toAlgebraic : fromAlgebraic] = []
+            if (!defendingColor[extra.defenses ? toAlgebraic : fromAlgebraic]) {
+              defendingColor[extra.defenses ? toAlgebraic : fromAlgebraic] = []
             }
-            defendingColor[extra.swap ? toAlgebraic : fromAlgebraic].push(extra.swap ? fromAlgebraic : toAlgebraic)
+            defendingColor[extra.defenses ? toAlgebraic : fromAlgebraic].push(extra.defenses ? fromAlgebraic : toAlgebraic)
           }
         }
         return defendingColor
       }, {})
     }
   }
-  return defending
+  if (extra.defenses) {
+    return COLORS.reduce((defenses, color) => {
+      defenses[color] = Object.keys(defending[color]).sort().reduce((defensesColor, fromAlgebraic) => {
+        defensesColor[fromAlgebraic] = defending[color][fromAlgebraic]
+        return defensesColor
+      }, {})
+      return defenses
+    }, {})
+  } else {
+    return defending
+  }
 }
 
 const getDefenses = (fen, extra = {}) => {
-  return getDefending(fen, Object.assign({}, extra, { swap: true }))
+  return getDefending(fen, Object.assign({}, extra, { defenses: true }))
 }
 
 const getInfo = (fen, algebraics) => {
@@ -207,16 +217,13 @@ const getSights = (fen, extra = {}) => {
       }
     }
   }
-  const sights = COLORS.reduce((sights, color) => {
-    sights[color] = {}
+  return COLORS.reduce((sights, color) => {
+    sights[color] = Object.keys(temp[color]).sort().reduce((sightsColor, fromAlgebraic) => {
+      sightsColor[fromAlgebraic] = temp[color][fromAlgebraic].sort()
+      return sightsColor
+    }, {})
     return sights
   }, {})
-  for (const color of COLORS) {
-    for (const fromAlgebraic of Object.keys(temp[color]).sort()) {
-      sights[color][fromAlgebraic] = temp[color][fromAlgebraic].sort()
-    }
-  }
-  return sights
 }
 
 const getThreats = (fen, extra = {}) => {
