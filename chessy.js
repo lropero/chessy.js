@@ -134,7 +134,7 @@ const getDefending = (fen, extra = {}) => {
 }
 
 const getDefenses = (fen, extra = {}) => {
-  return getDefending(fen, Object.assign({}, extra, { defenses: true }))
+  return getDefending(fen, { ...extra, ...{ defenses: true } })
 }
 
 const getInfo = (fen, algebraics) => {
@@ -146,7 +146,11 @@ const getInfo = (fen, algebraics) => {
       const defenses = getDefenses(fen, { board, ep, turn })
       const sights = getSights(fen, { board, ep, turn })
       const threats = getThreats(fen, { board, ep, turn })
+      const squares = Object.keys(SQUARES).sort()
       return algebraics.sort().reduce((info, algebraic) => {
+        if (!squares.includes(algebraic)) {
+          return info
+        }
         const piece = board[SQUARES[algebraic]]
         if (piece) {
           info[algebraic] = {
@@ -157,6 +161,15 @@ const getInfo = (fen, algebraics) => {
             sights: Object.assign({}, ...Object.values(sights))[algebraic] || null,
             threats: Object.assign({}, ...Object.values(threats))[algebraic] || null
           }
+        } else {
+          const seenBy = COLORS.reduce((seenBy, color) => {
+            seenBy[color] = []
+            return seenBy
+          }, {})
+          for (const color of COLORS) {
+            seenBy[color] = squares.filter((square) => sights[color][square]?.includes(algebraic))
+          }
+          info[algebraic] = { seenBy }
         }
         return info
       }, {})
@@ -227,7 +240,7 @@ const getSights = (fen, extra = {}) => {
 }
 
 const getThreats = (fen, extra = {}) => {
-  return getAttacking(fen, Object.assign({}, extra, { threats: true }))
+  return getAttacking(fen, { ...extra, ...{ threats: true } })
 }
 
 const squareToAlgebraic = (square) => {

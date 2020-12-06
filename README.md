@@ -1,27 +1,43 @@
 # chessy.js &middot; [![npm version](https://badge.fury.io/js/chessy.svg)](https://www.npmjs.com/package/chessy)&nbsp;[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-*Chess tools for the brain.*
+
+_Chess tools for the brain._
 
 <img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy.gif?raw=true" width="400">
 
 ### Installation
+
 ```sh
-$ yarn add chessy
+$ npm install chessy
 ```
 
 ### Usage
+
 Import default object..
+
 ```js
 const chessy = require('chessy')
 ```
 
 ..or use named imports
+
 ```js
-const { getAttacking, getDefending, getDefenses, getInfo, getObscured, getSights, getThreats } = require('chessy')
+const {
+  getAttacking,
+  getDefending,
+  getDefenses,
+  getInfo,
+  getObscured,
+  getSights,
+  getThreats
+} = require('chessy')
 ```
 
 ### API
+
 #### getAttacking(fen: String)
+
 <img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacking-white.png?raw=true" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-attacking-black.png?raw=true" width="300">
+
 ```js
 const fen = 'rnb1kbnr/pp2pppp/1q1p4/8/Q3P3/5N2/PPP2PPP/RNB1KB1R b KQkq - 2 5'
 const attacking = getAttacking(fen)
@@ -39,7 +55,9 @@ console.log(attacking)
 ```
 
 #### getDefending(fen: String)
+
 <img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-defending-white.png?raw=true" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-defending-black.png?raw=true" width="300">
+
 ```js
 const fen = 'rnb1kbnr/pp2pppp/1q1p4/8/Q3P3/5N2/PPP2PPP/RNB1KB1R b KQkq - 2 5'
 const defending = getDefending(fen)
@@ -72,7 +90,9 @@ console.log(defending)
 ```
 
 #### getDefenses(fen: String)
+
 <img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-defenses-white.png?raw=true" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-defenses-black.png?raw=true" width="300">
+
 ```js
 const fen = 'rnb1kbnr/pp2pppp/1q1p4/8/Q3P3/5N2/PPP2PPP/RNB1KB1R b KQkq - 2 5'
 const defenses = getDefenses(fen)
@@ -110,7 +130,9 @@ console.log(defenses)
 ```
 
 #### getInfo(fen: String, algebraics: Array)
+
 <img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-info-white.png?raw=true" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-info-black.png?raw=true" width="300">
+
 ```js
 const fen = 'rnb1kbnr/pp2pppp/1q1p4/8/Q3P3/5N2/PPP2PPP/RNB1KB1R b KQkq - 2 5'
 const info = getInfo(fen, ['a4', 'b6', 'f2'])
@@ -146,7 +168,9 @@ console.log(info)
 ```
 
 #### getObscured(fen: String)
+
 <img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-obscured-white.png?raw=true" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-obscured-black.png?raw=true" width="300">
+
 ```js
 const fen = 'rnb1kbnr/pp2pppp/1q1p4/8/Q3P3/5N2/PPP2PPP/RNB1KB1R b KQkq - 2 5'
 const obscured = getObscured(fen)
@@ -160,7 +184,9 @@ console.log(obscured)
 ```
 
 #### getSights(fen: String)
+
 <img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-sights-white.png?raw=true" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-sights-black.png?raw=true" width="300">
+
 ```js
 const fen = 'rnb1kbnr/pp2pppp/1q1p4/8/Q3P3/5N2/PPP2PPP/RNB1KB1R b KQkq - 2 5'
 const sights = getSights(fen)
@@ -206,7 +232,9 @@ console.log(sights)
 ```
 
 #### getThreats(fen: String)
+
 <img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-threats-white.png?raw=true" width="300">&emsp;<img src="https://github.com/lropero/lichessy/blob/master/thumbnails/chessy-threats-black.png?raw=true" width="300">
+
 ```js
 const fen = 'rnb1kbnr/pp2pppp/1q1p4/8/Q3P3/5N2/PPP2PPP/RNB1KB1R b KQkq - 2 5'
 const threats = getThreats(fen)
